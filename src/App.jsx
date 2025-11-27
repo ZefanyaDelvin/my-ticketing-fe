@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import AuthMiddleware from "./routes";
 import Dashboard from "./pages/Dashboard";
@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Public Route */}
-        <Route path="/*" element={<Login />} />
+        <Route path="/login" element={<Login />} />
 
         {/* Private Route */}
         <Route
@@ -20,6 +20,9 @@ function App() {
             </AuthMiddleware>
           }
         />
+
+        {/* If route doesn't exist → redirect */}
+        <Route path="/*" element={<Navigate to="/dashboard" />} />
       </Routes>
     </BrowserRouter>
   );

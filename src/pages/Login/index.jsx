@@ -11,6 +11,11 @@ const Login = () => {
   const [error, setError] = useState(null);
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      setError("Email and Password must be filled");
+      return;
+    }
+
     try {
       const response = await fetch(`${baseURL}/api/users/login`, {
         method: "POST",
@@ -23,7 +28,7 @@ const Login = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message);
+        setError(data.error || "Login failed");
         return;
       }
 
@@ -35,6 +40,12 @@ const Login = () => {
       navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
     }
   };
 
@@ -71,6 +82,7 @@ const Login = () => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={handleKeyDown}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
                 placeholder="Enter your email"
               />
@@ -89,6 +101,7 @@ const Login = () => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={handleKeyDown}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
                 placeholder="Enter your password"
               />
